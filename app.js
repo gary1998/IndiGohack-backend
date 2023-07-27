@@ -1,0 +1,166 @@
+const getApp = (logger) => {
+  if (!logger) {
+    return null;
+  } else {
+    logger.Client.debug("express app is being initialized");
+  }
+  const express = require("express");
+  const cors = require("cors");
+  const bcrypt = require("bcrypt");
+  const jwt = require("jsonwebtoken");
+  const authMiddleware = require("./middlewares/auth");
+  const loggingMiddleware = require("./middlewares/log");
+  const UNMR = require("./model/unmr.model.js");
+  const Event = require("./model/event.model.js");
+  const Staff = require("./model/staff.model.js");
+
+  const app = express();
+
+  app.use(cors());
+  app.use(loggingMiddleware(logger));
+  app.use(express.json());
+
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const { email, name, phone, password } = req.body;
+      const oldUser = await Staff.findOne({ email });
+      if (oldUser) {
+        logger.Client.debug(`duplicate user found: ${oldUser}`);
+        return res.status(409).send({ error: "user already exists" });
+      }
+      encryptedPassword = await bcrypt.hash(password, 10);
+      const userModel = new Staff({
+        email: email.toLowerCase(),
+        name,
+        phone,
+        password: encryptedPassword,
+      });
+      const user = await userModel.save();
+      return res.status(201).json({ email: user.email });
+    } catch (err) {
+      logger.Client.error(err);
+      return res.status(500).send({ error: err });
+    }
+  });
+
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const user = await Staff.findOne({ email });
+      if (user && (await bcrypt.compare(password, user.password))) {
+        const token = jwt.sign(
+          { user_id: user._id, email },
+          process.env.TOKEN_KEY || "IndiGoHack",
+          {
+            expiresIn: "2h",
+          }
+        );
+        user.token = token;
+        return res.status(200).json({ email: user.email, token: user.token });
+      }
+      return res.status(400).send({ error: "invalid credentials" });
+    } catch (err) {
+      logger.Client.error(err);
+      return res.status(500).send({ error: err });
+    }
+  });
+
+  app.post("/api/unmr/register", async (req, res) => {
+    try {
+      const {
+        pnr,
+        name,
+        date,
+        source,
+        destination,
+        receiver_name,
+        receiver_phone,
+      } = req.body;
+      const oldUNMR = await UNMR.findOne({ pnr });
+      if (oldUNMR) {
+        logger.Client.debug(`duplicate user found: ${oldUNMR}`);
+        return res.status(409).send({ error: "unmr already exists" });
+      }
+      const unmrModel = new UNMR({
+        pnr,
+        name,
+        date,
+        source,
+        destination,
+        receiver_name,
+        receiver_phone,
+      });
+      const unmr = await unmrModel.save();
+      return res.status(201).json(unmr);
+    } catch (err) {
+      logger.Client.error(err);
+      return res.status(500).send({ error: err });
+    }
+  });
+
+  app.post("/api/unmr/search", async (req, res) => {
+    try {
+      const { pnr, name, date, source, destination, receiver_phone } = req.body;
+      if (date == undefined || date == "") {
+        return res.status(400).send({ error: "bad request" });
+      }
+      let searchQuery = {
+        pnr: pnr != undefined || pnr != "" ? pnr : undefined,
+        name: name != undefined || name != "" ? name : undefined,
+        source: source != undefined || source != "" ? source : undefined,
+        destination:
+          destination != undefined || destination != ""
+            ? destination
+            : undefined,
+        receiver_phone:
+          receiver_phone != undefined || receiver_phone != ""
+            ? receiver_phone
+            : undefined,
+        date: date != undefined || date != "" ? date : undefined,
+      };
+      Object.keys(searchQuery).forEach(
+        (key) => searchQuery[key] === undefined && delete searchQuery[key]
+      );
+      const searcResults = await UNMR.find(searchQuery);
+      return res.status(200).json(searcResults);
+    } catch (err) {
+      logger.Client.error(err);
+      return res.status(500).send({ error: err });
+    }
+  });
+
+  app.get("/api/unmr/status", async (req, res) => {
+    try {
+      const pnr = req.query["pnr"];
+      if (pnr == null || pnr == undefined || pnr == "") {
+        return res.status(400).send({ error: "pnr not supplied" });
+      }
+      const events = await Event.find({ unmr_pnr: pnr }).sort({ date: 1 });
+      return res.status(200).json(events);
+    } catch (err) {
+      logger.Client.error(err);
+      return res.status(500).send({ error: err });
+    }
+  });
+
+  app.post("/api/admin/feed", authMiddleware(logger), async (req, res) => {
+    try {
+      const { unmr_pnr, name, date } = req.body;
+      const eventModel = new Event({
+        unmr_pnr,
+        name,
+        date,
+        staff_email: req.user.email,
+      });
+      const event = await eventModel.save();
+      return res.status(201).json(event);
+    } catch (err) {
+      logger.Client.error(err);
+      return res.status(500).send({ error: err });
+    }
+  });
+
+  return app;
+};
+
+module.exports = { getApp };
