@@ -1,6 +1,9 @@
-#!/bin/bash
+FROM registry.access.redhat.com/ubi8/nodejs-16:1-111.1689167503
 
-FROM node:18
+USER root
+RUN yum update -y && yum upgrade -y
+
+WORKDIR /opt/app-root/src
 
 ARG PORT=5600
 ARG MONGO_URI=""
@@ -9,14 +12,13 @@ ARG LOG_LEVEL="debug"
 ENV MONGO_URI $MONGO_URI
 ENV PORT $PORT
 ENV LOG_LEVEL $LOG_LEVEL
+ENV NODE_ENV production
 
-WORKDIR /usr/src/app
-COPY package*.json ./
+COPY package.json /opt/app-root/src
 RUN npm install
-COPY . .
+COPY . /opt/app-root/src
 
 RUN npm test
 
 EXPOSE ${PORT}
-
 CMD [ "npm", "start" ]
