@@ -159,19 +159,19 @@ const getApp = (logger) => {
         return res.status(404).send({ error: `no such unmr found` });
       } else {
         let prevEvt = await Event.find({ unmr_pnr }).sort({ time: -1 });
-        if ((prevEvt.length && prevEvt[0].step_number > step_number) || (prevEvt.length && prevEvt[0].event_name == event_name)){
-          return res.status(400).send({ error: `obsolete status provided` });
-        }
         if (prevEvt.length && prevEvt[0].step_status == "failed") {
           return res
             .status(400)
             .send({ error: `${unmr_pnr}'s last status was failure` });
+        } else {
+          if ((prevEvt.length && prevEvt[0].step_number > step_number) || (prevEvt.length && prevEvt[0].event_name == event_name && prevEvt[0].step_number == step_number)){
+            return res.status(400).send({ error: `obsolete status provided` });
+          }
         }
       }
       const event = await eventModel.save();
       return res.status(201).json(event);
     } catch (err) {
-      console.log(err);
       logger.Client.error(err);
       return res.status(500).send({ error: err });
     }

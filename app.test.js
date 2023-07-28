@@ -203,7 +203,6 @@ describe("app", () => {
       });
       test("valid body", async () => {
         const res = await request(expressApp).get("/api/unmr/status?pnr=abc");
-        console.log("--------" + res.body + "------");
         expect(res.statusCode).toEqual(200);
       });
     });
@@ -222,10 +221,11 @@ describe("app", () => {
         const resp = await Staff.deleteOne({ email: "abc@def.com" });
         expect(resp.deletedCount).toEqual(1);
       });
-      test("no body", async () => {
+      test("no auth token", async () => {
         let res = await request(expressApp).post("/api/admin/feed");
         expect(res.statusCode).toEqual(403);
-
+      });
+      test("no body", async () => {
         const loginResp = await request(expressApp)
           .post("/api/auth/login")
           .send({
@@ -233,18 +233,12 @@ describe("app", () => {
             password: "abc",
           });
         const user = JSON.parse(JSON.stringify(loginResp.body));
-
         res = await request(expressApp)
           .post("/api/admin/feed")
           .set("Authorization", user.token);
-        expect(res.statusCode).toEqual(500);
+        expect(res.statusCode).toEqual(404);
       });
       test("invalid body", async () => {
-        let res = await request(expressApp).post("/api/admin/feed").send({
-          name: "abc",
-        });
-        expect(res.statusCode).toEqual(403);
-
         const loginResp = await request(expressApp)
           .post("/api/auth/login")
           .send({
@@ -252,16 +246,15 @@ describe("app", () => {
             password: "abc",
           });
         const user = JSON.parse(JSON.stringify(loginResp.body));
-
         res = await request(expressApp)
           .post("/api/admin/feed")
           .set("Authorization", user.token)
           .send({
             name: "abc",
           });
-        expect(res.statusCode).toEqual(500);
+        expect(res.statusCode).toEqual(404);
       });
-      test("valid body", async () => {
+      test("valid body invalid unmr", async () => {
         const loginResp = await request(expressApp)
           .post("/api/auth/login")
           .send({
@@ -269,7 +262,6 @@ describe("app", () => {
             password: "abc",
           });
         const user = JSON.parse(JSON.stringify(loginResp.body));
-
         const res = await request(expressApp)
           .post("/api/admin/feed")
           .set("Authorization", user.token)
@@ -278,11 +270,193 @@ describe("app", () => {
             name: "abc",
             date: Date.now(),
           });
-        const event = JSON.parse(JSON.stringify(res.body));
+        expect(res.statusCode).toEqual(404);
+      });
+      test("valid body valid unmr", async () => {
+        let unmr = await request(expressApp).post("/api/unmr/register").send({
+          pnr: "abc",
+          name: "abc",
+          date: "2023-07-06",
+          source: "abc",
+          destination: "abc",
+          receiver_name: "abc",
+          receiver_phone: "9999999999",
+        });
+        expect(unmr.statusCode).toEqual(201);
+        const loginResp = await request(expressApp)
+          .post("/api/auth/login")
+          .send({
+            email: "abc@def.com",
+            password: "abc",
+          });
+        const user = JSON.parse(JSON.stringify(loginResp.body));
+        const res = await request(expressApp)
+          .post("/api/admin/feed")
+          .set("Authorization", user.token)
+          .send({
+            unmr_pnr: JSON.parse(JSON.stringify(unmr.body)).pnr,
+            event_name: "abc",
+            step_status: "started",
+            time: Date.now(),
+            step_number: 1,
+          });
         expect(res.statusCode).toEqual(201);
-        const Event = require("./model/event.model.js");
-        const resp = await Event.deleteOne({ _id: event._id });
-        expect(resp.deletedCount).toEqual(1);
+        const UNMR = require("./model/unmr.model.js");
+        await UNMR.deleteOne(JSON.parse(JSON.stringify(unmr.body)));
+        const Evt = require("./model/event.model.js");
+        await Evt.deleteOne(JSON.parse(JSON.stringify(res.body)));
+      });
+      test("obsolete event feed", async () => {
+        let unmr = await request(expressApp).post("/api/unmr/register").send({
+          pnr: "abc",
+          name: "abc",
+          date: "2023-07-06",
+          source: "abc",
+          destination: "abc",
+          receiver_name: "abc",
+          receiver_phone: "9999999999",
+        });
+        expect(unmr.statusCode).toEqual(201);
+        const loginResp = await request(expressApp)
+          .post("/api/auth/login")
+          .send({
+            email: "abc@def.com",
+            password: "abc",
+          });
+        const user = JSON.parse(JSON.stringify(loginResp.body));
+        let res = await request(expressApp)
+          .post("/api/admin/feed")
+          .set("Authorization", user.token)
+          .send({
+            unmr_pnr: JSON.parse(JSON.stringify(unmr.body)).pnr,
+            event_name: "abc",
+            step_status: "completed",
+            time: Date.now(),
+            step_number: 1,
+          });
+        expect(res.statusCode).toEqual(201);
+        res = await request(expressApp)
+          .post("/api/admin/feed")
+          .set("Authorization", user.token)
+          .send({
+            unmr_pnr: JSON.parse(JSON.stringify(unmr.body)).pnr,
+            event_name: "abc",
+            step_status: "completed",
+            time: Date.now(),
+            step_number: 2,
+          });
+        expect(res.statusCode).toEqual(201);
+        res = await request(expressApp)
+          .post("/api/admin/feed")
+          .set("Authorization", user.token)
+          .send({
+            unmr_pnr: JSON.parse(JSON.stringify(unmr.body)).pnr,
+            event_name: "abc",
+            step_status: "started",
+            time: Date.now(),
+            step_number: 1,
+          });
+        expect(res.statusCode).toEqual(400);
+        const UNMR = require("./model/unmr.model.js");
+        await UNMR.deleteOne(JSON.parse(JSON.stringify(unmr.body)));
+        const Evt = require("./model/event.model.js");
+        await Evt.deleteMany({
+          unmr_pnr: JSON.parse(JSON.stringify(unmr.body)).pnr,
+        });
+      });
+      test("same event feed", async () => {
+        let unmr = await request(expressApp).post("/api/unmr/register").send({
+          pnr: "abc",
+          name: "abc",
+          date: "2023-07-06",
+          source: "abc",
+          destination: "abc",
+          receiver_name: "abc",
+          receiver_phone: "9999999999",
+        });
+        expect(unmr.statusCode).toEqual(201);
+        const loginResp = await request(expressApp)
+          .post("/api/auth/login")
+          .send({
+            email: "abc@def.com",
+            password: "abc",
+          });
+        const user = JSON.parse(JSON.stringify(loginResp.body));
+        let res = await request(expressApp)
+          .post("/api/admin/feed")
+          .set("Authorization", user.token)
+          .send({
+            unmr_pnr: JSON.parse(JSON.stringify(unmr.body)).pnr,
+            event_name: "abc",
+            step_status: "started",
+            time: Date.now(),
+            step_number: 1,
+          });
+        expect(res.statusCode).toEqual(201);
+        res = await request(expressApp)
+          .post("/api/admin/feed")
+          .set("Authorization", user.token)
+          .send({
+            unmr_pnr: JSON.parse(JSON.stringify(unmr.body)).pnr,
+            event_name: "abc",
+            step_status: "completed",
+            time: Date.now(),
+            step_number: 1,
+          });
+        expect(res.statusCode).toEqual(400);
+        const UNMR = require("./model/unmr.model.js");
+        await UNMR.deleteOne(JSON.parse(JSON.stringify(unmr.body)));
+        const Evt = require("./model/event.model.js");
+        await Evt.deleteMany({
+          unmr_pnr: JSON.parse(JSON.stringify(unmr.body)).pnr,
+        });
+      });
+      test("new feed over failure", async () => {
+        let unmr = await request(expressApp).post("/api/unmr/register").send({
+          pnr: "abc",
+          name: "abc",
+          date: "2023-07-06",
+          source: "abc",
+          destination: "abc",
+          receiver_name: "abc",
+          receiver_phone: "9999999999",
+        });
+        expect(unmr.statusCode).toEqual(201);
+        const loginResp = await request(expressApp)
+          .post("/api/auth/login")
+          .send({
+            email: "abc@def.com",
+            password: "abc",
+          });
+        const user = JSON.parse(JSON.stringify(loginResp.body));
+        let res = await request(expressApp)
+          .post("/api/admin/feed")
+          .set("Authorization", user.token)
+          .send({
+            unmr_pnr: JSON.parse(JSON.stringify(unmr.body)).pnr,
+            event_name: "abc",
+            step_status: "failed",
+            time: Date.now(),
+            step_number: 1,
+          });
+        expect(res.statusCode).toEqual(201);
+        res = await request(expressApp)
+          .post("/api/admin/feed")
+          .set("Authorization", user.token)
+          .send({
+            unmr_pnr: JSON.parse(JSON.stringify(unmr.body)).pnr,
+            event_name: "abc",
+            step_status: "completed",
+            time: Date.now(),
+            step_number: 2,
+          });
+        expect(res.statusCode).toEqual(400);
+        const UNMR = require("./model/unmr.model.js");
+        await UNMR.deleteOne(JSON.parse(JSON.stringify(unmr.body)));
+        const Evt = require("./model/event.model.js");
+        await Evt.deleteOne({
+          unmr_pnr: JSON.parse(JSON.stringify(unmr.body)).pnr,
+        });
       });
     });
 

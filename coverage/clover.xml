@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1690448900271" clover="3.2.0">
-  <project timestamp="1690448900271" name="All files">
-    <metrics statements="134" coveredstatements="128" conditionals="57" coveredconditionals="47" methods="20" coveredmethods="20" elements="211" coveredelements="195" complexity="0" loc="134" ncloc="134" packages="4" files="8" classes="8"/>
+<coverage generated="1690536640371" clover="3.2.0">
+  <project timestamp="1690536640371" name="All files">
+    <metrics statements="143" coveredstatements="129" conditionals="70" coveredconditionals="60" methods="20" coveredmethods="19" elements="233" coveredelements="208" complexity="0" loc="143" ncloc="143" packages="4" files="8" classes="8"/>
     <package name="IndiGohack-backend">
-      <metrics statements="84" coveredstatements="78" conditionals="47" coveredconditionals="39" methods="8" coveredmethods="8"/>
+      <metrics statements="93" coveredstatements="84" conditionals="60" coveredconditionals="52" methods="8" coveredmethods="8"/>
       <file name="app.js" path="/Users/gauravgoswami/Desktop/indigo-hackathon/IndiGohack-backend/app.js">
-        <metrics statements="84" coveredstatements="78" conditionals="47" coveredconditionals="39" methods="8" coveredmethods="8"/>
+        <metrics statements="93" coveredstatements="84" conditionals="60" coveredconditionals="52" methods="8" coveredmethods="8"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="4" type="cond" truecount="2" falsecount="0"/>
         <line num="3" count="1" type="stmt"/>
@@ -24,39 +24,39 @@
         <line num="20" count="2" type="stmt"/>
         <line num="21" count="2" type="stmt"/>
         <line num="23" count="2" type="stmt"/>
-        <line num="24" count="10" type="stmt"/>
-        <line num="25" count="10" type="stmt"/>
-        <line num="26" count="10" type="stmt"/>
-        <line num="27" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="24" count="15" type="stmt"/>
+        <line num="25" count="15" type="stmt"/>
+        <line num="26" count="15" type="stmt"/>
+        <line num="27" count="15" type="cond" truecount="2" falsecount="0"/>
         <line num="28" count="1" type="stmt"/>
         <line num="29" count="1" type="stmt"/>
-        <line num="31" count="9" type="stmt"/>
-        <line num="32" count="8" type="stmt"/>
-        <line num="38" count="8" type="stmt"/>
-        <line num="39" count="6" type="stmt"/>
+        <line num="31" count="14" type="stmt"/>
+        <line num="32" count="13" type="stmt"/>
+        <line num="38" count="13" type="stmt"/>
+        <line num="39" count="11" type="stmt"/>
         <line num="41" count="3" type="stmt"/>
         <line num="42" count="3" type="stmt"/>
         <line num="46" count="2" type="stmt"/>
-        <line num="47" count="6" type="stmt"/>
-        <line num="48" count="6" type="stmt"/>
-        <line num="49" count="6" type="stmt"/>
-        <line num="50" count="6" type="cond" truecount="4" falsecount="0"/>
-        <line num="51" count="4" type="stmt"/>
-        <line num="58" count="4" type="stmt"/>
-        <line num="59" count="4" type="stmt"/>
+        <line num="47" count="10" type="stmt"/>
+        <line num="48" count="10" type="stmt"/>
+        <line num="49" count="10" type="stmt"/>
+        <line num="50" count="10" type="cond" truecount="4" falsecount="0"/>
+        <line num="51" count="8" type="stmt"/>
+        <line num="58" count="8" type="stmt"/>
+        <line num="59" count="8" type="stmt"/>
         <line num="61" count="2" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
         <line num="68" count="2" type="stmt"/>
-        <line num="69" count="5" type="stmt"/>
-        <line num="78" count="5" type="stmt"/>
-        <line num="79" count="5" type="stmt"/>
-        <line num="80" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="69" count="9" type="stmt"/>
+        <line num="78" count="9" type="stmt"/>
+        <line num="79" count="9" type="stmt"/>
+        <line num="80" count="9" type="cond" truecount="2" falsecount="0"/>
         <line num="81" count="1" type="stmt"/>
         <line num="82" count="1" type="stmt"/>
-        <line num="84" count="4" type="stmt"/>
-        <line num="93" count="4" type="stmt"/>
-        <line num="94" count="2" type="stmt"/>
+        <line num="84" count="8" type="stmt"/>
+        <line num="93" count="8" type="stmt"/>
+        <line num="94" count="6" type="stmt"/>
         <line num="96" count="2" type="stmt"/>
         <line num="97" count="2" type="stmt"/>
         <line num="101" count="2" type="stmt"/>
@@ -81,72 +81,81 @@
         <line num="141" count="0" type="stmt"/>
         <line num="142" count="0" type="stmt"/>
         <line num="146" count="2" type="stmt"/>
-        <line num="147" count="3" type="stmt"/>
-        <line num="148" count="3" type="stmt"/>
-        <line num="149" count="3" type="stmt"/>
-        <line num="155" count="3" type="stmt"/>
-        <line num="156" count="1" type="stmt"/>
-        <line num="158" count="2" type="stmt"/>
-        <line num="159" count="2" type="stmt"/>
-        <line num="163" count="2" type="stmt"/>
-        <line num="167" count="1" type="stmt"/>
+        <line num="147" count="11" type="stmt"/>
+        <line num="148" count="11" type="stmt"/>
+        <line num="149" count="11" type="stmt"/>
+        <line num="157" count="11" type="stmt"/>
+        <line num="158" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="159" count="3" type="stmt"/>
+        <line num="161" count="8" type="stmt"/>
+        <line num="162" count="8" type="cond" truecount="4" falsecount="0"/>
+        <line num="163" count="1" type="stmt"/>
+        <line num="167" count="7" type="cond" truecount="7" falsecount="0"/>
+        <line num="168" count="2" type="stmt"/>
+        <line num="172" count="5" type="stmt"/>
+        <line num="173" count="5" type="stmt"/>
+        <line num="175" count="0" type="stmt"/>
+        <line num="176" count="0" type="stmt"/>
+        <line num="177" count="0" type="stmt"/>
+        <line num="181" count="2" type="stmt"/>
+        <line num="184" count="1" type="stmt"/>
       </file>
     </package>
     <package name="IndiGohack-backend.config">
-      <metrics statements="13" coveredstatements="13" conditionals="6" coveredconditionals="4" methods="4" coveredmethods="4"/>
+      <metrics statements="13" coveredstatements="10" conditionals="6" coveredconditionals="4" methods="4" coveredmethods="3"/>
       <file name="db.js" path="/Users/gauravgoswami/Desktop/indigo-hackathon/IndiGohack-backend/config/db.js">
-        <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
-        <line num="1" count="2" type="stmt"/>
-        <line num="3" count="2" type="stmt"/>
-        <line num="4" count="4" type="stmt"/>
-        <line num="5" count="2" type="stmt"/>
+        <metrics statements="9" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
-        <line num="16" count="1" type="stmt"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
-        <line num="22" count="2" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
       </file>
       <file name="logger.js" path="/Users/gauravgoswami/Desktop/indigo-hackathon/IndiGohack-backend/config/logger.js">
         <metrics statements="4" coveredstatements="4" conditionals="6" coveredconditionals="4" methods="1" coveredmethods="1"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="3" count="8" type="stmt"/>
-        <line num="5" count="8" type="stmt"/>
-        <line num="32" count="3" type="stmt"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
       </file>
     </package>
     <package name="IndiGohack-backend.middlewares">
-      <metrics statements="26" coveredstatements="26" conditionals="4" coveredconditionals="4" methods="7" coveredmethods="7"/>
+      <metrics statements="26" coveredstatements="24" conditionals="4" coveredconditionals="4" methods="7" coveredmethods="7"/>
       <file name="auth.js" path="/Users/gauravgoswami/Desktop/indigo-hackathon/IndiGohack-backend/middlewares/auth.js">
-        <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
-        <line num="1" count="2" type="stmt"/>
-        <line num="3" count="5" type="stmt"/>
-        <line num="4" count="8" type="stmt"/>
-        <line num="5" count="8" type="stmt"/>
-        <line num="6" count="8" type="cond" truecount="2" falsecount="0"/>
-        <line num="7" count="3" type="stmt"/>
-        <line num="8" count="3" type="stmt"/>
-        <line num="10" count="5" type="stmt"/>
-        <line num="11" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="12" count="4" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
-        <line num="15" count="1" type="stmt"/>
-        <line num="17" count="4" type="stmt"/>
-        <line num="20" count="2" type="stmt"/>
+        <metrics statements="14" coveredstatements="12" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="12" type="stmt"/>
+        <line num="5" count="12" type="stmt"/>
+        <line num="6" count="12" type="cond" truecount="2" falsecount="0"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="10" count="11" type="stmt"/>
+        <line num="11" count="11" type="cond" truecount="2" falsecount="0"/>
+        <line num="12" count="11" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="11" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
       </file>
       <file name="log.js" path="/Users/gauravgoswami/Desktop/indigo-hackathon/IndiGohack-backend/middlewares/log.js">
         <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
-        <line num="2" count="5" type="stmt"/>
-        <line num="3" count="34" type="stmt"/>
-        <line num="4" count="34" type="stmt"/>
-        <line num="5" count="34" type="stmt"/>
-        <line num="6" count="31" type="stmt"/>
-        <line num="7" count="31" type="stmt"/>
-        <line num="9" count="33" type="stmt"/>
-        <line num="12" count="34" type="stmt"/>
-        <line num="13" count="31" type="stmt"/>
-        <line num="14" count="31" type="stmt"/>
-        <line num="15" count="31" type="stmt"/>
-        <line num="18" count="2" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="51" type="stmt"/>
+        <line num="3" count="51" type="stmt"/>
+        <line num="4" count="51" type="stmt"/>
+        <line num="5" count="51" type="stmt"/>
+        <line num="6" count="51" type="stmt"/>
+        <line num="8" count="51" type="stmt"/>
+        <line num="11" count="51" type="stmt"/>
+        <line num="12" count="51" type="stmt"/>
+        <line num="13" count="51" type="stmt"/>
+        <line num="14" count="51" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
       </file>
     </package>
     <package name="IndiGohack-backend.model">
@@ -155,21 +164,21 @@
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
       </file>
       <file name="staff.model.js" path="/Users/gauravgoswami/Desktop/indigo-hackathon/IndiGohack-backend/model/staff.model.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
-        <line num="11" count="8" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
+        <line num="12" count="13" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
       </file>
       <file name="unmr.model.js" path="/Users/gauravgoswami/Desktop/indigo-hackathon/IndiGohack-backend/model/unmr.model.js">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
-        <line num="35" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
       </file>
     </package>
   </project>
