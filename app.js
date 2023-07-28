@@ -69,6 +69,7 @@ const getApp = (logger) => {
     try {
       const {
         pnr,
+        parent_email,
         name,
         date,
         source,
@@ -83,6 +84,7 @@ const getApp = (logger) => {
       }
       const unmrModel = new UNMR({
         pnr,
+        parent_email,
         name,
         date,
         source,
@@ -164,12 +166,18 @@ const getApp = (logger) => {
             .status(400)
             .send({ error: `${unmr_pnr}'s last status was failure` });
         } else {
-          if ((prevEvt.length && prevEvt[0].step_number > step_number) || (prevEvt.length && prevEvt[0].event_name == event_name && prevEvt[0].step_number == step_number)){
+          if (
+            (prevEvt.length && prevEvt[0].step_number > step_number) ||
+            (prevEvt.length &&
+              prevEvt[0].event_name == event_name &&
+              prevEvt[0].step_number == step_number)
+          ) {
             return res.status(400).send({ error: `obsolete status provided` });
           }
         }
       }
       const event = await eventModel.save();
+      await sendEventUpdateInEmail(unmr, event, logger);
       return res.status(201).json(event);
     } catch (err) {
       logger.Client.error(err);
@@ -178,6 +186,31 @@ const getApp = (logger) => {
   });
 
   return app;
+};
+
+const sendEventUpdateInEmail = async (unmr, event, logger) => {
+  const request = require("request");
+  let headers = {
+    "Content-type": "application/json",
+  };
+  let dataString = {
+    value1: unmr.parent_email,
+    value2: `${unmr.name} [ ${unmr.pnr} ]`,
+    value3: `${event.event_name}`,
+  };
+  let options = {
+    url: `https://maker.ifttt.com/trigger/send_email/with/key/${process.env.IFTTT_KEY}`,
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(dataString),
+  };
+  request(options, (error, response, body) => {
+    if (!error && response.statusCode == 200) {
+      logger.Client.debug(`send update email to ${unmr.parent_email}`);
+    } else {
+      logger.Client.error(`cannot send email: ${body}`);
+    }
+  });
 };
 
 module.exports = { getApp };

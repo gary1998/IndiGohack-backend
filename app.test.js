@@ -145,6 +145,7 @@ describe("app", () => {
           destination: "abc",
           receiver_name: "abc",
           receiver_phone: "9999999999",
+          parent_email: "abc@xyz.com",
         });
         const res = await request(expressApp).post("/api/unmr/register").send({
           pnr: "abc",
@@ -154,6 +155,7 @@ describe("app", () => {
           destination: "abc",
           receiver_name: "abc",
           receiver_phone: "9999999999",
+          parent_email: "abc@xyz.com",
         });
         expect(res.statusCode).toEqual(409);
         const UNMR = require("./model/unmr.model.js");
@@ -169,6 +171,7 @@ describe("app", () => {
           destination: "abc",
           receiver_name: "abc",
           receiver_phone: "9999999999",
+          parent_email: "abc@xyz.com",
         });
         expect(res.statusCode).toEqual(201);
         expect(JSON.parse(JSON.stringify(res.body))).toHaveProperty("pnr");
@@ -281,6 +284,7 @@ describe("app", () => {
           destination: "abc",
           receiver_name: "abc",
           receiver_phone: "9999999999",
+          parent_email: "abc@xyz.com",
         });
         expect(unmr.statusCode).toEqual(201);
         const loginResp = await request(expressApp)
@@ -315,6 +319,7 @@ describe("app", () => {
           destination: "abc",
           receiver_name: "abc",
           receiver_phone: "9999999999",
+          parent_email: "abc@xyz.com",
         });
         expect(unmr.statusCode).toEqual(201);
         const loginResp = await request(expressApp)
@@ -373,6 +378,7 @@ describe("app", () => {
           destination: "abc",
           receiver_name: "abc",
           receiver_phone: "9999999999",
+          parent_email: "abc@xyz.com",
         });
         expect(unmr.statusCode).toEqual(201);
         const loginResp = await request(expressApp)
@@ -420,6 +426,7 @@ describe("app", () => {
           destination: "abc",
           receiver_name: "abc",
           receiver_phone: "9999999999",
+          parent_email: "abc@xyz.com",
         });
         expect(unmr.statusCode).toEqual(201);
         const loginResp = await request(expressApp)

@@ -8,10 +8,12 @@ WORKDIR /opt/app-root/src
 ARG PORT=5600
 ARG MONGO_URI=""
 ARG LOG_LEVEL="debug"
+ARG IFTTT_KEY=""
 
 ENV MONGO_URI $MONGO_URI
 ENV PORT $PORT
 ENV LOG_LEVEL $LOG_LEVEL
+ENV IFTTT_KEY $IFTTT_KEY
 ENV NODE_ENV production
 
 COPY package.json /opt/app-root/src

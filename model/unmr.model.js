@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 const unmrSchema = new mongoose.Schema(
   {
@@ -7,6 +8,14 @@ const unmrSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       required: true,
+    },
+    parent_email: {
+      type: String,
+      trim: true,
+      required: true,
+      validate: (value) => {
+        return validator.isEmail(value);
+      },
     },
     name: {
       type: String,

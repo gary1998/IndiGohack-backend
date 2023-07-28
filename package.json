@@ -25,6 +25,8 @@
     "jest": "^29.6.1",
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.4.1",
+    "nodemailer": "^6.9.4",
+    "request": "^2.88.2",
     "supertest": "^6.3.3",
     "validator": "^13.9.0",
     "winston": "^3.10.0"
