@@ -11,7 +11,7 @@ const initDB = (logger) => {
     .then(() => {
       logger.Client.debug("connection has been established to the db");
     })
-    .catch(err => {
+    .catch((err) => {
       logger.Client.debug("cannot connect to db, exiting...");
       logger.Client.error(err);
       process.exit(1);

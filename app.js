@@ -121,8 +121,8 @@ const getApp = (logger) => {
       Object.keys(searchQuery).forEach(
         (key) => searchQuery[key] === undefined && delete searchQuery[key]
       );
-      const searcResults = await UNMR.find(searchQuery);
-      return res.status(200).json(searcResults);
+      const searchResults = await UNMR.find(searchQuery);
+      return res.status(200).json(searchResults);
     } catch (err) {
       logger.Client.error(err);
       return res.status(500).send({ error: err });
@@ -135,7 +135,7 @@ const getApp = (logger) => {
       if (pnr == null || pnr == undefined || pnr == "") {
         return res.status(400).send({ error: "pnr not supplied" });
       }
-      const events = await Event.find({ unmr_pnr: pnr }).sort({ date: 1 });
+      const events = await Event.find({ unmr_pnr: pnr }).sort({ time: -1 });
       return res.status(200).json(events);
     } catch (err) {
       logger.Client.error(err);
@@ -145,16 +145,33 @@ const getApp = (logger) => {
 
   app.post("/api/admin/feed", authMiddleware(logger), async (req, res) => {
     try {
-      const { unmr_pnr, name, date } = req.body;
+      const { unmr_pnr, step_number, step_status, event_name } = req.body;
       const eventModel = new Event({
         unmr_pnr,
-        name,
-        date,
+        step_number,
+        step_status,
+        time: new Date(),
+        event_name,
         staff_email: req.user.email,
       });
+      const unmr = await UNMR.findOne({ pnr: unmr_pnr });
+      if (!unmr) {
+        return res.status(404).send({ error: `no such unmr found` });
+      } else {
+        let prevEvt = await Event.find({ unmr_pnr }).sort({ time: -1 });
+        if (prevEvt.length && prevEvt[0].step_number > step_number) {
+          return res.status(400).send({ error: `obsolete status provided` });
+        }
+        if (prevEvt.length && prevEvt[0].step_status == "failed") {
+          return res
+            .status(400)
+            .send({ error: `${unmr_pnr}'s last status was failure` });
+        }
+      }
       const event = await eventModel.save();
       return res.status(201).json(event);
     } catch (err) {
+      console.log(err);
       logger.Client.error(err);
       return res.status(500).send({ error: err });
     }

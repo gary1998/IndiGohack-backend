@@ -7,12 +7,24 @@ const eventSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
-    name: {
+    step_number: {
+      type: Number,
+      min: 1,
+      max: 6,
+      required: true,
+    },
+    step_status: {
+      type: String,
+      trim: true,
+      enum: ["started", "in-progress", "completed", "failed"],
+      required: true,
+    },
+    event_name: {
       type: String,
       trim: true,
       required: true,
     },
-    date: {
+    time: {
       type: Date,
       required: true,
     },
