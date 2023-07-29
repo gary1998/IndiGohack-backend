@@ -189,26 +189,46 @@ const getApp = (logger) => {
 };
 
 const sendEventUpdateInEmail = async (unmr, event, logger) => {
+  if (unmr.parent_email=="abc@xyz.com") {
+    logger.Client.debug("not sending email and sms because code is being ran under test suite");
+    return;
+  }
   const request = require("request");
   let headers = {
     "Content-type": "application/json",
   };
+
+  // for sending email to parent
   let dataString = {
     value1: unmr.parent_email,
     value2: `${unmr.name} [ ${unmr.pnr} ]`,
     value3: `${event.event_name}`,
   };
+  let iftttEventName = `send_email`;
   let options = {
-    url: `https://maker.ifttt.com/trigger/send_email/with/key/${process.env.IFTTT_KEY}`,
+    url: `https://maker.ifttt.com/trigger/${iftttEventName}/with/key/${process.env.IFTTT_KEY}`,
     method: "POST",
     headers: headers,
     body: JSON.stringify(dataString),
   };
   request(options, (error, response, body) => {
     if (!error && response.statusCode == 200) {
-      logger.Client.debug(`send update email to ${unmr.parent_email}`);
+      logger.Client.debug(`sent update email to ${unmr.parent_email}`);
     } else {
       logger.Client.error(`cannot send email: ${body}`);
+    }
+  });
+
+  // for sending sms to receiver
+  dataString.value1 = unmr.receiver_phone;
+  iftttEventName = "send_sms";
+  options.url = `https://maker.ifttt.com/trigger/${iftttEventName}/with/key/${process.env.IFTTT_KEY}`;
+  options.body = JSON.stringify(dataString);
+  request(options, (error, response, body) => {
+    if (!error && response.statusCode == 200) {
+      logger.Client.debug(`sent sms to ${unmr.receiver_phone}`);
+    } else {
+      logger.Client.error(`cannot send sms: ${body}`);
     }
   });
 };
