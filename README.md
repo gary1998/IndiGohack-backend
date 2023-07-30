@@ -13,7 +13,7 @@
 * Install all dependent libraries/modules of the project:
   * Go to the project dir, and execute: `npm install`.
  
-## Environemt Variables
+## Environment Variables
 * MONGO_URI: URI of the MongoDB service.
 * PORT: Port where you want your backend services to be running.
 * LOG_LEVEL: Pick any log level from [here](https://github.com/winstonjs/winston).
